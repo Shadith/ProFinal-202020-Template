@@ -23,11 +23,10 @@
  * Dario Correal
  *
  """
-
 import config as cf
 from App import model
 import csv
-
+import os
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -40,12 +39,46 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
+def inicial():
+    inicial = model.newInicial()
+    return inicial
+
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
-#  de datos en los modelos
+#  de datos en los
+#  modelos
 # ___________________________________________________
+
+def carga_archivos (inicial, opcion):
+    for filename in os.listdir(cf.data_dir):
+        if filename.endswith(opcion + ".csv"):
+            print("Cargando archivo: " + filename)
+            cargar(inicial, filename)
+    return inicial
+
+def cargar(inicial, ruta):
+    rutaCom = cf.data_dir + ruta
+    input_file = csv.DictReader(open(rutaCom, encoding="utf-8"), delimiter=",")
+    for data in input_file:
+        model.parteA(inicial, data)
+        model.mapa_ordenado_fecha(inicial, data)
+    return inicial
+
+
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+
+def parteA_consulta(inicial, rankingM, rankingN):
+    retorno = model.parteA_consulta(inicial, rankingM, rankingN)
+    return retorno
+
+def consulta_parteBA(inicial, fecha, top):
+    retorno = model.consulta_parteBA(inicial, fecha, top)
+    return retorno
+
+def ParteB_consultaB(inicial, fecha_ini, fecha_fin, topN):
+    retorno = model.parteB_consultaB(inicial, fecha_ini, fecha_fin, topN)
+    return retorno
