@@ -23,13 +23,12 @@
  * Dario Correal
  *
  """
-
-
 import sys
 import config
 from App import controller
 from DISClib.ADT import stack
 import timeit
+from DISClib.ADT import list as lt
 assert config
 
 """
@@ -51,3 +50,60 @@ operación seleccionada.
 """
 Menu principal
 """
+
+def printMenu():
+    print("Bienvenido")
+    print("1- Inicializar Analyzer")
+    print("2- Cargar información en el Analyzer")
+    print("3- PARTE A")
+    print("4- APARTE B")
+    print("5- APARTE 2B")
+    print("0- Salir")
+
+while True:
+    printMenu()
+    inputs = input("Seleccione una opcion para continuar:\n")
+    if inputs == "1":
+        vacio = controller.inicial()
+    elif inputs == "2":
+        decision = input("Qué archivo desea cargar :\n")
+        controller.carga_archivos(vacio, decision)
+    elif inputs == "3":
+        rankingM = int(input("Top M de compañias por cantidad de taxis:\n"))
+        rankingN = int(input("Top N compañias por servicios:\n"))
+        parteA = controller.parteA_consulta(vacio, rankingM, rankingN)
+    
+        print("Cantidad de taxis de los servicios reportados:", parteA[3])
+        print("Cantidad de compañias de los servicios reportados:", parteA[2])
+        print("topM")
+        for i in range(1,lt.size(parteA[0])+1):
+            imprime = lt.getElement(parteA[0], i)
+            print(imprime["compañia"],len(imprime["taxis"]))
+        print("topN")
+        for i in range(1,lt.size(parteA[1])+1):
+            imprime = lt.getElement(parteA[1], i)
+            print(imprime["compañia"], imprime["servicios"])
+
+    elif inputs == "4":
+        fechaUs = input("Fecha \n:")
+        top = int(input("Digite el top \n:"))
+        resultado=controller.consulta_parteBA(vacio, fechaUs, top)
+        print("topN")
+        for taxi in range(1, lt.size(resultado) + 1):
+            imprime = lt.getElement(resultado, taxi)
+            print(imprime["taxi"],imprime["puntos"])
+            
+
+    elif inputs == "5":
+        fecha_ini = input("Fecha_ini\n:")
+        fecha_fin=input("fecha_fin\n:")
+        top = int(input("Digite el top \n:"))
+        resultado=controller.ParteB_consultaB(vacio, fecha_ini,fecha_fin, top)
+        print("topN")
+        for taxi in range(1, lt.size(resultado) + 1):
+            imprime = lt.getElement(resultado, taxi)
+            print(imprime["taxi"],imprime["puntos"])
+
+    else:
+        sys.exit(0)
+sys.exit(0)
