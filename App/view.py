@@ -39,11 +39,6 @@ operación seleccionada.
 """
 
 # ___________________________________________________
-#  Variables
-# ___________________________________________________
-
-
-# ___________________________________________________
 #  Menu principal
 # ___________________________________________________
 
@@ -75,23 +70,31 @@ while True:
     
         print("Cantidad de taxis de los servicios reportados:", parteA[3])
         print("Cantidad de compañias de los servicios reportados:", parteA[2])
-        print("topM")
+        print("******************************************************************")
+        print("Compañias con mas taxis inscritos: ")
+        print("******************************************************************")
         for i in range(1,lt.size(parteA[0])+1):
             imprime = lt.getElement(parteA[0], i)
             print(imprime["compañia"],len(imprime["taxis"]))
-        print("topN")
+        print("******************************************************************")
+        print("Top de compañias que mas servicios prestaron: ")
+        print("******************************************************************")
         for i in range(1,lt.size(parteA[1])+1):
             imprime = lt.getElement(parteA[1], i)
             print(imprime["compañia"], imprime["servicios"])
+        print("******************************************************************")
 
     elif inputs == "4":
         fechaUs = input("Fecha \n:")
         top = int(input("Digite el top \n:"))
         resultado=controller.consulta_parteBA(vacio, fechaUs, top)
-        print("topN")
+        print("******************************************************************")
+        print("Top taxi en una fecha: ")
+        print("******************************************************************")
         for taxi in range(1, lt.size(resultado) + 1):
             imprime = lt.getElement(resultado, taxi)
             print(imprime["taxi"],imprime["puntos"])
+        print("******************************************************************")
             
 
     elif inputs == "5":
@@ -99,10 +102,13 @@ while True:
         fecha_fin=input("fecha_fin\n:")
         top = int(input("Digite el top \n:"))
         resultado=controller.ParteB_consultaB(vacio, fecha_ini,fecha_fin, top)
-        print("topN")
+        print("******************************************************************")
+        print("Top taxi con mas puntos entre dos fechas: ")
+        print("******************************************************************")
         for taxi in range(1, lt.size(resultado) + 1):
             imprime = lt.getElement(resultado, taxi)
             print(imprime["taxi"],imprime["puntos"])
+        print("******************************************************************")
 
     else:
         sys.exit(0)
