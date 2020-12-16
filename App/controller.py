@@ -53,7 +53,6 @@ def inicial():
 def carga_archivos (inicial, opcion):
     for filename in os.listdir(cf.data_dir):
         if filename.endswith(opcion + ".csv"):
-            print("Cargando archivo: " + filename)
             cargar(inicial, filename)
     return inicial
 
