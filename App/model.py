@@ -79,21 +79,6 @@ def parteA(inicial, data):
 # Funciones de consulta
 # ==============================
 
-def consulta_parteBA(inicial, fecha, top):
-    fecha = datetime.datetime.strptime(fecha, "%Y-%m-%d")
-    fecha = fecha.date()
-    mapa_taxi = me.getValue(om.get(inicial["fechas"], fecha))
-    final = lt.newList("ARRAY_LIST")
-    lst = m.valueSet(mapa_taxi)
-    shellsort.shellSort(lst, comparador_puntos)
-    cuantas_tengo = 1
-    while cuantas_tengo <= top:
-        elemento_agregar = lt.getElement(lst, cuantas_tengo)
-        lt.addLast(final, elemento_agregar)
-        cuantas_tengo += 1
-    return final
-
-
 def parteA_consulta(inicial, rankingM, rankingN):
     orden_compañias = m.valueSet(inicial["compañias"])
     compañias_servicios_ordenados = m.valueSet(inicial["compañias"])
@@ -122,16 +107,16 @@ def parteA_consulta(inicial, rankingM, rankingN):
 
 def parteB_consultaB(inicial, fecha_ini, fecha_fin, topN):
     fecha_fin = datetime.datetime.strptime(fecha_fin, "%Y-%m-%d")
-    fecha_fin = fecha.date()
+    fecha_fin = fecha_fin.date()
 
     fecha_ini = datetime.datetime.strptime(fecha_ini, "%Y-%m-%d")
     fecha_ini = fecha_ini.date()
 
-    datos_mitad = om.values(Inicial["fechas"], fecha_ini, fecha_fin)
+    datos_mitad = om.values(inicial["fechas"], fecha_ini, fecha_fin)
     datos = m.newMap(maptype="PROBING", comparefunction=compararEstacions2)
     for dic in range(1, lt.size(datos_mitad) + 1):
         lista = lt.getElement(datos_mitad, dic)
-        lista = m.valueSet(lista)
+        lista = m.valueSet(lista) 
 
         for ele in range(1, lt.size(lista) + 1):
             dato = lt.getElement(lista, ele)
@@ -148,14 +133,27 @@ def parteB_consultaB(inicial, fecha_ini, fecha_fin, topN):
                 m.put(datos, nuevo_nodo["taxi"],nuevo_nodo)
     list_final = lt.newList("ARRAY_LIST")
     ordenado = m.valueSet(datos)
-    shellsort.shellsort(ordenado, comparador_puntos)
+    mergesort.mergesort(ordenado, comparador_puntos)
     for dato_ in range(1, lt.size(ordenado) + 1):
         candidato = lt.getElement(ordenado, dato_)
         lt.addLast(list_final, candidato)
         if dato_ == topN:
             break
-    return topN
+    return list_final
 
+def consulta_parteBA(inicial, fecha, top):
+    fecha = datetime.datetime.strptime(fecha, "%Y-%m-%d")
+    fecha = fecha.date()
+    mapa_taxi = me.getValue(om.get(inicial["fechas"], fecha))
+    final = lt.newList("ARRAY_LIST")
+    lst = m.valueSet(mapa_taxi)
+    mergesort.mergesort(lst, comparador_puntos)
+    cuantas_tengo = 1
+    while cuantas_tengo <= top:
+        elemento_agregar = lt.getElement(lst, cuantas_tengo)
+        lt.addLast(final, elemento_agregar)
+        cuantas_tengo += 1
+    return final
 
 def mapa_ordenado_fecha(inicial, data):
     if data["trip_total"] == "":
@@ -186,7 +184,7 @@ def mapa_ordenado_fecha(inicial, data):
                 taxi = me.getValue(taxi)
                 puntos = taxi["puntos"]
                 servicios = taxi["servicios"]
-                suma_nueva = total_dinero
+                suma_nueva = total_dinero/distancia
                 puntos = ((puntos / servicios) + suma_nueva) * (servicios + 1) 
                 taxi["puntos"] = puntos
                 taxi["servicios"] += 1
